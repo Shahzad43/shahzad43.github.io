@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- Optional FALLBACK page. GitHub Pages serves this for any unknown path,
+     so if someone opens https://shahzad43.github.io/dl/product/42 WITHOUT the
+     app installed, they see this instead of a bare 404. This is the talk's
+     "Fallback URL" concept: the link never breaks. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Linking &amp; Open Intents</title>
+  <style>
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+      font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(135deg,#080B1A,#151D3B);color:#F1F5F9;text-align:center}
+    .card{max-width:440px;padding:32px}
+    h1{font-size:24px;margin:0 0 12px}
+    p{color:#94A3B8;line-height:1.5}
+    code{background:rgba(255,255,255,.07);padding:2px 6px;border-radius:6px;color:#22D3EE}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📱 Deep Linking &amp; Open Intents</h1>
+    <p>This is a verified <strong>App Link</strong>. If the demo app were installed,
+       the OS would have opened it straight to this screen.</p>
+    <p>Since it isn't installed, you're seeing this web <em>fallback</em> instead —
+       exactly as the talk describes. Install the app, then tap the link again.</p>
+    <p style="margin-top:24px;font-size:13px">URL pattern:
+       <code>https://shahzad43.github.io/dl/&lt;type&gt;/&lt;id&gt;</code></p>
+  </div>
+</body>
+</html>
