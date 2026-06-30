@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<!-- Optional FALLBACK page. GitHub Pages serves this for any unknown path,
-     so if someone opens https://shahzad43.github.io/dl/product/42 WITHOUT the
-     app installed, they see this instead of a bare 404. This is the talk's
-     "Fallback URL" concept: the link never breaks. -->
+<!-- FALLBACK + "Open in app" page. GitHub Pages serves this for any /dl/* path
+     that has no static file. Two jobs:
+       1. If the app is NOT installed, it's the web fallback (link never breaks).
+       2. If the app IS installed but the user reached here via Chrome's address
+          bar (which, by Android design, never auto-opens App Links), the
+          "Open in app" button fires an intent:// URL that Chrome DOES honour,
+          launching the app. If not installed, intent:// uses the fallback URL. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -12,21 +15,51 @@
     body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
       font-family:-apple-system,Segoe UI,Roboto,sans-serif;
       background:linear-gradient(135deg,#080B1A,#151D3B);color:#F1F5F9;text-align:center}
-    .card{max-width:440px;padding:32px}
+    .card{max-width:460px;padding:32px}
     h1{font-size:24px;margin:0 0 12px}
     p{color:#94A3B8;line-height:1.5}
-    code{background:rgba(255,255,255,.07);padding:2px 6px;border-radius:6px;color:#22D3EE}
+    code{background:rgba(255,255,255,.07);padding:2px 6px;border-radius:6px;color:#22D3EE;font-size:13px}
+    .btn{display:inline-block;margin-top:22px;padding:14px 26px;border-radius:14px;
+      background:#22D3EE;color:#06222a;font-weight:700;text-decoration:none;font-size:16px;
+      border:none;cursor:pointer}
+    .target{margin-top:18px;font-size:13px}
+    .hint{margin-top:14px;font-size:12px;color:#64748B}
   </style>
 </head>
 <body>
   <div class="card">
     <h1>📱 Deep Linking &amp; Open Intents</h1>
-    <p>This is a verified <strong>App Link</strong>. If the demo app were installed,
-       the OS would have opened it straight to this screen.</p>
-    <p>Since it isn't installed, you're seeing this web <em>fallback</em> instead —
-       exactly as the talk describes. Install the app, then tap the link again.</p>
-    <p style="margin-top:24px;font-size:13px">URL pattern:
-       <code>https://shahzad43.github.io/dl/&lt;type&gt;/&lt;id&gt;</code></p>
+    <p>This is a verified <strong>App Link</strong>. Tapping it from a chat, email
+       or search result opens the app automatically.</p>
+    <p>You reached this page in a <strong>browser</strong> (typing a URL in the
+       address bar never auto-opens an app — that's an Android rule). Tap below to
+       launch the app anyway:</p>
+
+    <a id="openBtn" class="btn" href="#">Open in app ↗</a>
+
+    <p class="target">Target: <code id="target">/dl/&lt;type&gt;/&lt;id&gt;</code></p>
+    <p class="hint">If the app isn't installed, this stays on the web page.</p>
   </div>
+
+  <script>
+    (function () {
+      var host = location.host;                       // shahzad43.github.io
+      var path = location.pathname;                   // /dl/product/42
+      if (!/^\/dl\//.test(path)) path = '/dl/product/42'; // sane default
+      document.getElementById('target').textContent = path;
+
+      var httpsUrl = 'https://' + host + path;
+      var fallback = encodeURIComponent(httpsUrl + '?noapp=1');
+      // Chrome honours intent:// from a page even though it ignores the omnibox.
+      var intentUrl = 'intent://' + host + path +
+        '#Intent;scheme=https;package=com.example.deeplink_and_openintent;' +
+        'S.browser_fallback_url=' + fallback + ';end';
+
+      var btn = document.getElementById('openBtn');
+      var isAndroid = /Android/i.test(navigator.userAgent);
+      // On Android use the intent:// launcher; elsewhere just open the https URL.
+      btn.setAttribute('href', isAndroid ? intentUrl : httpsUrl);
+    })();
+  </script>
 </body>
 </html>
